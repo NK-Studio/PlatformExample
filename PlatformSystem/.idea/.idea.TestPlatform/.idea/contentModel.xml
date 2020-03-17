@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\bnm00\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\bnm00\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_TestPlatform.-1630438622.00" t="ExcludeRecursive" />
+    <e p="C:\Users\bnm00\Desktop\TestPlatform" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="1.Script" t="Include">
+          <e p="Array.cs" t="Include" />
+          <e p="Other" t="Include">
+            <e p="AnimatorPro.cs" t="Include" />
+          </e>
+          <e p="Player.cs" t="Include" />
+        </e>
+        <e p="Plugins" t="Include">
+          <e p="Inspector Gadgets" t="Include">
+            <e p="Inspector" t="Include">
+              <e p="BlendShapeViewer.cs" t="Include" />
+              <e p="CommentAsset.cs" t="Include" />
+              <e p="CommentComponent.cs" t="Include" />
+            </e>
+            <e p="InspectorGadgets.Lite.xml" t="Include" />
+            <e p="Misc" t="Include">
+              <e p="AssemblyInfo.cs" t="Include" />
+              <e p="Shortcut.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Smart" t="Include">
+          <e p="Inspector" t="Include">
+            <e p="Editor" t="Include">
+              <e p="Inspector.cs" t="Include" />
+              <e p="InspectorComponent.cs" t="Include" />
+              <e p="InspectorEditor.cs" t="Include" />
+              <e p="InspectorEvents.cs" t="Include" />
+              <e p="InspectorFields.cs" t="Include" />
+              <e p="InspectorFilter.cs" t="Include" />
+              <e p="InspectorPreview.cs" t="Include" />
+              <e p="InspectorProperties.cs" t="Include" />
+              <e p="InspectorSearch.cs" t="Include" />
+              <e p="InspectorSelection.cs" t="Include" />
+              <e p="InspectorSettings.cs" t="Include" />
+              <e p="InspectorStyles.cs" t="Include" />
+              <e p="InspectorTypes.cs" t="Include" />
+              <e p="InspectorUtil.cs" t="Include" />
+              <e p="Preview.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Utility" t="Include">
+            <e p="Editor" t="Include">
+              <e p="CreateScriptWindow.cs" t="Include" />
+              <e p="EditorExtensions.cs" t="Include" />
+              <e p="SmartEditorGUI.cs" t="Include" />
+              <e p="SmartEditorViewer.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="InspectorGadgets.csproj" t="IncludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+      <e p="TestPlatform.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>
