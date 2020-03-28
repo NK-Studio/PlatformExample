@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AnimatorPro;
 
 [RequireComponent(typeof(AnimatorPro))]
@@ -26,13 +23,13 @@ public class Player : MonoBehaviour
 
     [SerializeField, Tooltip("땅 체크 마스크")]
     private LayerMask GroundMask;
-    
+
     #endregion
 
     #region Hide Inspector
 
     //박스콜라이더 참조 변수
-    private CapsuleCollider2D bodyCollider;
+    private BoxCollider2D bodyCollider;
 
     //애니메이터 프로 참조 변수
     private AnimatorPro animatorPro;
@@ -45,7 +42,7 @@ public class Player : MonoBehaviour
 
     //좌우 이동에 대한 변수
     private float h;
-    
+
     //땅 체크 변수
     private bool isGround;
 
@@ -69,7 +66,7 @@ public class Player : MonoBehaviour
         animatorPro = GetComponent<AnimatorPro>();
         animatorPro.Init(animator);
 
-        bodyCollider = GetComponent<CapsuleCollider2D>();
+        bodyCollider = GetComponent<BoxCollider2D>();
         rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
@@ -77,7 +74,7 @@ public class Player : MonoBehaviour
     {
         //방향키 입력
         h = Input.GetAxisRaw("Horizontal");
-        
+
         //서있기, 달리기 애니메이션 전환
         animatorPro.SetParam(ID_Move, h);
     }
@@ -86,22 +83,22 @@ public class Player : MonoBehaviour
     {
         //이동
         updateMove(h);
-        
+
         //좌우 전환
         updateFlip(h);
 
         //땅 체크
         updateGroundCheck();
-        
+
         //점프, 낙하 중력 변환
         updateGravitiyScale();
-        
+
         //점프
         updateJump();
-        
+
         //낙하
         updateFall();
-        
+
         //앉기
         updateSit();
     }
@@ -110,16 +107,23 @@ public class Player : MonoBehaviour
 
     private void updateGroundCheck()
     {
-        isGround = bodyCollider.IsTouchingLayers(GroundMask);
+        //플레이어의 콜라이더에서 CenterBottom의 위치를 담습니다.
+        var Point = Vector2.zero;
+        var bounds = bodyCollider.bounds;
+        Point.x = bounds.center.x;
+        Point.y = bounds.min.y;
+
+        //땅 체크
+        isGround = Physics2D.OverlapCircle(Point, 0.025f, GroundMask);
 
         //땅에 닿으면, 낙하를 false한다.
         if (isGround)
-            animatorPro.SetParam(ID_isFall,false);
-        
+            animatorPro.SetParam(ID_isFall, false);
+
         //땅 충돌을 실시간으로 애니메이터에 넘긴다.
         animatorPro.SetParam(ID_isGround, isGround);
     }
-    
+
     private void updateGravitiyScale()
     {
         //디폴트는 1이다.
@@ -130,7 +134,7 @@ public class Player : MonoBehaviour
             rigidbody2D.gravityScale = jumpGravitiy;
         else if (rigidbody2D.velocity.y < 0f)
             rigidbody2D.gravityScale = fallGravitiy;
-        
+
         //실시간으로 애니메이터에 액터의 y의 힘을 넘겨준다.
         animatorPro.SetParam(ID_Velocity_Y, rigidbody2D.velocity.y);
     }
@@ -138,14 +142,14 @@ public class Player : MonoBehaviour
     #endregion
 
     #region playerUpadate
-    
+
     private void updateFlip(float Axis)
     {
         //h가 0.0f가 아니라면, (h != 0f 이렇게 조건하는 것은 효율이 좋지 않습니다.)
         if (!Mathf.Approximately(Axis, 0f))
             transform.localScale = new Vector2(Axis, 1f);
     }
-    
+
     private void updateMove(float Axis)
     {
         //이동 처리
@@ -163,23 +167,29 @@ public class Player : MonoBehaviour
 
     private void updateJump()
     {
-        //점프 상태이거나, 스페이스바를 안눌렀다면, 아래 코드 구문 실행 X
-        if (animatorPro.GetParam<bool>(ID_isJump) || !Input.GetKey(KeyCode.W)) return;
+        //낙하 상태이거나, 점프 상태이거나, 스페이스바를 안눌렀다면, 아래 코드 구문 실행 X
+        if (animatorPro.GetParam<bool>(ID_isFall) || animatorPro.GetParam<bool>(ID_isJump) ||
+            !Input.GetKey(KeyCode.W)) return;
 
         //점프 상태로 변경
         animatorPro.SetParam(ID_isJump, true);
-        
+
+        //Y의 힘을 초기화 함.
+        var resultVelocity = rigidbody2D.velocity;
+        resultVelocity.y = 0f;
+        rigidbody2D.velocity = resultVelocity;
+
         //실제 액터를 위로 점프 시킴
-        rigidbody2D.AddForce(Vector2.up * jumpSpeed,ForceMode2D.Impulse);
+        rigidbody2D.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
     }
-    
+
     private void updateFall()
     {
         //땅에 있지 않고, 떨어지는 중이라면,
-        if(!isGround && rigidbody2D.velocity.y < 0.0f)
-            animatorPro.SetParam(ID_isFall,true);
+        if (!isGround && rigidbody2D.velocity.y < 0.0f)
+            animatorPro.SetParam(ID_isFall, true);
     }
-    
+
     private void updateSit()
     {
         //키를 누르고 않누르고를 canMove의 움직일 수 없다, 있다로 처리함.
@@ -193,17 +203,17 @@ public class Player : MonoBehaviour
         }
         else
             canMove = true;
-        
+
         animatorPro.SetParam(ID_isSit, isSit);
     }
-    
+
     #endregion
 
     #region animState
 
     [AnimatorExit("Base Layer.Jump&Fall.Fall")]
     public void JumpEnd() =>
-        animatorPro.SetParam(ID_isJump,false);
+        animatorPro.SetParam(ID_isJump, false);
 
     #endregion
 }
